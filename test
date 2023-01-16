@@ -1,0 +1,88 @@
+game_data = {
+    'player': {
+        'name': 'player',
+        'health': 100,
+        'attack': 1,
+        'defense': 0,
+        'hit_chance': 0.8,
+        'dodge_chance': 0.2
+    },
+    'beest': {
+        'name': 'beest',
+        'health': 100,
+        'attack': 1,
+        'defense': 0,
+        'hit_chance': 0.8,
+        'dodge_chance': 0.2
+    }
+}
+
+def reset_player_data():
+    game_data['player']['health'] = 100
+    game_data['player']['attack'] = 1
+    game_data['player']['defense'] = 0
+    game_data['player']['hit_chance'] = random.randint(1, 10)
+    game_data['player']['evade_chance'] = random.randint(1, 10)
+
+def reset_beest_data():
+    game_data['beest']['health'] = 100
+    game_data['beest']['attack'] = 1
+    game_data['beest']['defense'] = 0
+    game_data['beest']['hit_chance'] = random.randint(1, 10)
+    game_data['beest']['evade_chance'] = random.randint(1, 10)
+
+
+import time
+import random
+while game_data['player']['health'] > 0 and game_data['beest']['health'] > 0:
+    # 遊戲邏輯
+    if random.randint(1, 10) == 1:
+        game_data['player']['defense'] += 1
+        game_data['player']['attack'] += 1
+    game_data['beest']['health'] -= max(0,game_data['player']['attack'] - game_data['beest']['defense'])
+    game_data['player']['health'] -= max(0,game_data['beest']['attack'] - game_data['player']['defense'])
+    print("Player Health:", game_data['player']['health'])
+    print("Beest Health:", game_data['beest']['health'])
+    time.sleep(1)
+while True:
+    # 遊戲邏輯
+    if game_data['player']['health'] <= 0:
+        print("Player died!")
+        reset_player_data()
+    if game_data['beest']['health'] <= 0:
+        print("Beest died!")
+        reset_beest_data()
+    if game_data['player']['health'] <= 0 or game_data['beest']['health'] <= 0:
+        break
+
+
+
+    # 遊戲邏輯
+    if random.randint(1, 10) == 1:
+        game_data['player']['defense'] += 1
+        game_data['player']['attack'] += 1
+
+    hit_chance = random.randint(1, 10)
+    evade_chance = random.randint(1, 10)
+    game_data['player']['hit_chance'] = hit_chance
+    game_data['player']['evade_chance'] = evade_chance
+
+    game_data['beest']['health'] -= max(0,game_data['player']['attack'] - game_data['beest']['defense'])
+    game_data['player']['health'] -= max(0, game_data['beest']['attack'] - game_data['player']['defense'])
+
+    print("Player Health:", game_data['player']['health'])
+    print("Beest Health:", game_data['beest']['health'])
+    time.sleep(1)
+
+    if game_data['player']['health'] <= 0 and game_data['beest']['health'] > 0:
+        print("Beest wins!")
+
+        # 結算和處理
+        game_data['beest']['health'] = game_data['beest']['health']
+    elif game_data['beest']['health'] <= 0 and game_data['player']['health'] > 0:
+        print("Player wins!")
+        game_data['player']['health'] = 100
+        game_data['beest']['health'] = game_data['beest']['health'] * 2
+        continue
+    elif game_data['player']['health'] <= 0 or game_data['beest']['health'] <= 0:
+        break
